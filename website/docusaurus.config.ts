@@ -87,12 +87,16 @@ const config: Config = {
           title: 'Templates',
           items: [
             {
-              label: 'Code Review',
-              to: '/docs/templates/code-review',
+              label: 'Security Review',
+              to: '/docs/templates/code-review/security-review',
             },
             {
-              label: 'Testing',
-              to: '/docs/templates/testing',
+              label: 'Performance Review',
+              to: '/docs/templates/code-review/performance-review',
+            },
+            {
+              label: 'Unit Test Generation',
+              to: '/docs/templates/testing/unit-test-generation',
             },
           ],
         },
