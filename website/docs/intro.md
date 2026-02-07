@@ -24,23 +24,17 @@ Prompt templates are pre-written, structured prompts that guide GitHub Copilot t
 
 ## Template Categories
 
-### Code Review
-Templates for reviewing code quality, security, performance, and maintainability.
-
-### Testing
-Templates for generating unit tests, integration tests, and test strategies.
-
-### Documentation
-Templates for creating README files, API documentation, and code comments. *(Coming soon)*
+### Agent Workflows
+Templates for GitHub Copilot agents to handle complex workflows like requirements writing and disciplined ticket implementation with clear execution rules.
 
 ## Quick Start
 
 Here's a simple example of using a template:
 
-1. Navigate to [Security Review](/docs/templates/code-review/security-review)
+1. Navigate to [Requirements Writing](/docs/templates/agent-workflows/requirements-writing)
 2. Copy the example prompt
-3. Replace placeholders with your actual file path or code
-4. Use it in GitHub Copilot Chat or inline suggestions
+3. Replace placeholders with your actual requirements
+4. Use it in GitHub Copilot Chat to generate comprehensive tickets
 
 ## Repository Structure
 

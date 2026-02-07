@@ -87,16 +87,12 @@ const config: Config = {
           title: 'Templates',
           items: [
             {
-              label: 'Security Review',
-              to: '/docs/templates/code-review/security-review',
+              label: 'Requirements Writing',
+              to: '/docs/templates/agent-workflows/requirements-writing',
             },
             {
-              label: 'Performance Review',
-              to: '/docs/templates/code-review/performance-review',
-            },
-            {
-              label: 'Unit Test Generation',
-              to: '/docs/templates/testing/unit-test-generation',
+              label: 'Ticket Assignment',
+              to: '/docs/templates/agent-workflows/ticket-assignment',
             },
           ],
         },

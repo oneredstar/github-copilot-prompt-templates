@@ -29,6 +29,9 @@ jobs:
           cache: 'npm'
           cache-dependency-path: website/package-lock.json
 
+      - name: Verify template structure
+        run: node scripts/verify-templates.js
+
       - name: Install dependencies
         working-directory: ./website
         run: npm ci

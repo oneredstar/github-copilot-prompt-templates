@@ -17,21 +17,26 @@ This repository contains a library of reusable prompt templates for GitHub Copil
 ## 🗂️ Repository Structure
 
 ```
-├── templates/              # Canonical source of all prompt templates (Markdown)
+├── templates/              # Canonical source - EDIT TEMPLATES HERE
 │   ├── code-review/       # Code review prompt templates
 │   ├── testing/           # Testing prompt templates
 │   └── documentation/     # Documentation prompt templates
 │
 ├── website/               # Docusaurus documentation site
 │   ├── docs/             # Documentation content
+│   │   └── templates/    # Auto-generated from templates/ (DO NOT EDIT)
 │   ├── src/              # React components
 │   └── static/           # Static assets
+│
+├── scripts/
+│   ├── sync-templates.js    # Syncs templates/ to website/docs/templates/
+│   └── verify-templates.js  # CI validation for single source of truth
 │
 └── .github/
     └── workflows/        # GitHub Actions for automated deployment
 ```
 
-**Key principle:** `templates/` contains the canonical template sources. `website/docs/templates/` mirrors this content for website display.
+**⚠️ Important:** `templates/` is the single source of truth. The `website/docs/templates/` directory is automatically generated during build and should never be edited manually.
 
 ## 🚀 Quick Start
 
@@ -70,19 +75,21 @@ npm ci
 
 ```bash
 # Start the development server
+# (automatically syncs templates first)
 npm run start
 ```
 
-This opens a browser at `http://localhost:3000`. The site reloads automatically when you make changes.
+This opens a browser at `http://localhost:3000`. The site reloads automatically when you make changes. Templates are automatically synced from `templates/` before starting.
 
 #### Build
 
 ```bash
 # Build the static site
+# (automatically syncs templates first)
 npm run build
 ```
 
-This generates static content in the `website/build/` directory, which can be served by any static hosting service.
+This generates static content in the `website/build/` directory, which can be served by any static hosting service. Templates are automatically synced from `templates/` before building.
 
 #### Serve Built Site
 
@@ -102,11 +109,12 @@ We welcome contributions! Here's how to add a new template:
 3. **Add your template**:
    - Create a Markdown file in `templates/<category>/your-template.md`
    - Follow the [template structure guidelines](https://oneredstar.github.io/github-copilot-prompt-templates/docs/contributing)
-4. **Update the documentation**:
-   - Create a corresponding page in `website/docs/templates/<category>/your-template.md`
-   - Update `website/sidebars.ts` if needed
+   - ⚠️ **Do NOT edit files in `website/docs/templates/`** - they are auto-generated
+4. **Update sidebar** (if needed):
+   - Edit `website/sidebars.ts` to add your template to the navigation
 5. **Test locally**:
    - Run `npm run build` in the `website/` directory
+   - Templates will be automatically synced and built
    - Verify no errors or broken links
 6. **Submit a pull request**
 

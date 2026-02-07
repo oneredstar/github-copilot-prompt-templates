@@ -5,25 +5,32 @@ This file contains essential knowledge for AI coding agents working on this repo
 ## Repository Architecture
 
 ### Big Picture
-This repository maintains a library of GitHub Copilot prompt templates with dual structure:
-1. **Canonical templates** in `templates/` - The source of truth for all prompt templates
+This repository maintains a library of GitHub Copilot prompt templates with automated build:
+1. **Canonical templates** in `templates/` - The single source of truth for all prompt templates
 2. **Documentation site** in `website/` - A Docusaurus-based browsable website
+3. **Automated sync** - Templates are automatically copied to `website/docs/templates/` during build
+
+**⚠️ Critical:** `templates/` is the ONLY location where templates should be edited. The `website/docs/templates/` directory is automatically generated and must never be manually edited.
 
 ### Directory Structure
 
 ```
 /
-├── templates/                    # Canonical template sources (Markdown)
+├── templates/                    # Canonical template sources - EDIT HERE ONLY
 │   ├── README.md                # Organization and structure guide
 │   ├── code-review/             # Code review templates
 │   ├── testing/                 # Testing templates
 │   └── documentation/           # Documentation templates
 │
+├── scripts/
+│   ├── sync-templates.js        # Auto-syncs templates/ to website/docs/templates/
+│   └── verify-templates.js      # CI validation for single source of truth
+│
 ├── website/                      # Docusaurus documentation site
 │   ├── docs/                    # Documentation content
 │   │   ├── intro.md            # Landing page
 │   │   ├── contributing.md     # Contribution guide
-│   │   └── templates/          # Template documentation (mirrors templates/)
+│   │   └── templates/          # AUTO-GENERATED - DO NOT EDIT MANUALLY
 │   │       ├── code-review/
 │   │       └── testing/
 │   ├── src/                     # React components and pages
@@ -38,10 +45,11 @@ This repository maintains a library of GitHub Copilot prompt templates with dual
 ```
 
 ### Content Relationship
-- `templates/` contains the canonical source files
-- `website/docs/templates/` mirrors template content for website display
-- Both should stay in sync when templates are added or updated
-- Documentation pages can add front matter and links back to canonical sources
+- `templates/` contains the canonical source files (SINGLE SOURCE OF TRUTH)
+- `website/docs/templates/` is automatically generated from `templates/` during build
+- The sync script (`scripts/sync-templates.js`) adds front matter and canonical links
+- Contributors must NEVER edit files in `website/docs/templates/` directly
+- The directory `website/docs/templates/` is gitignored and regenerated on every build
 
 ## Developer Workflows
 
@@ -74,26 +82,24 @@ npm run clear
 1. **Create canonical template** in `templates/<category>/template-name.md`
    - Follow standard template structure (see `templates/README.md`)
    - Use lowercase kebab-case for filenames
+   - ⚠️ **Do NOT create files in `website/docs/templates/`** - they are auto-generated
 
-2. **Add documentation page** in `website/docs/templates/<category>/template-name.md`
-   - Mirror template content
-   - Add front matter with `sidebar_position` if needed
-   - Include link back to canonical source
-
-3. **Update sidebar** in `website/sidebars.ts`
+2. **Update sidebar** in `website/sidebars.ts`
    - Add new template to appropriate category
    - Create new category if needed
 
+3. **Configure front matter** (optional) in `scripts/sync-templates.js`
+   - Add sidebar position if needed in `CATEGORY_SIDEBAR_POSITIONS` object
+
 4. **Test locally**
-   - Run `npm run start` to verify rendering
-   - Run `npm run build` to check for errors
+   - Run `npm run start` to verify rendering (auto-syncs templates)
+   - Run `npm run build` to check for errors (auto-syncs templates)
    - Verify links and navigation work
 
 ### Adding a New Category
 
 1. Create directory in `templates/<new-category>/`
-2. Create directory in `website/docs/templates/<new-category>/`
-3. Add category to `website/sidebars.ts`:
+2. Add category to `website/sidebars.ts`:
    ```typescript
    {
      type: 'category',
@@ -101,7 +107,9 @@ npm run clear
      items: ['templates/new-category/template-name'],
    }
    ```
-4. Update footer links in `website/docusaurus.config.ts` if desired
+3. Update footer links in `website/docusaurus.config.ts` if desired
+
+Note: The `website/docs/templates/<new-category>/` directory will be automatically created during build.
 
 ## Configuration Files
 
@@ -182,10 +190,12 @@ In repository settings → Pages:
 
 1. Checkout code
 2. Setup Node.js 20 with npm cache
-3. Install deps with `npm ci` in `website/`
-4. Build with `npm run build` in `website/`
-5. Upload `website/build/` directory
-6. Deploy to Pages
+3. Verify template structure (no manual edits to generated files)
+4. Install deps with `npm ci` in `website/`
+5. Sync templates from `templates/` to `website/docs/templates/` (automatic via prebuild)
+6. Build with `npm run build` in `website/`
+7. Upload `website/build/` directory
+8. Deploy to Pages
 
 ## Common Pitfalls
 
@@ -226,14 +236,9 @@ In repository settings → Pages:
 - Check build output for specific broken link reports
 
 ### Content Sync Drift
-**Problem:** Templates in `templates/` don't match `website/docs/templates/`
+**Problem:** Templates are not being automatically synced
 
-**Cause:** Updates to canonical templates not reflected in docs
-
-**Solution:**
-- When updating template, update both locations
-- Consider the canonical source (`templates/`) as the source of truth
-- Documentation pages can add metadata but core content should match
+**This is no longer a problem!** Templates are automatically synced from `templates/` to `website/docs/templates/` during build via prebuild hooks in `package.json`. The sync script (`scripts/sync-templates.js`) handles this automatically.
 
 ### Node/npm Version Mismatch
 **Problem:** Build works locally but fails in CI
@@ -260,6 +265,7 @@ Build artifacts are ignored:
 - `node_modules/` - Dependencies
 - `.docusaurus/` - Build cache
 - `website/build/` - Production build output
+- `website/docs/templates/` - Generated templates
 
 Never commit these to version control.
 
@@ -268,7 +274,6 @@ Never commit these to version control.
 Before submitting PR with template changes:
 
 - [ ] Canonical template created/updated in `templates/`
-- [ ] Documentation page created/updated in `website/docs/templates/`
 - [ ] Sidebar updated in `website/sidebars.ts` if needed
 - [ ] Run `npm ci` in `website/` - succeeds
 - [ ] Run `npm run start` in `website/` - site loads, template appears
@@ -280,7 +285,7 @@ Before submitting PR with template changes:
 
 ## Quick Reference
 
-**Add template:** Create in `templates/`, mirror in `website/docs/templates/`, update `website/sidebars.ts`
+**Add template:** Create in `templates/`, update `website/sidebars.ts`
 
 **Build site:** `cd website && npm run build`
 

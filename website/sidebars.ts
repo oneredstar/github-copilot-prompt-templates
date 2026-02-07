@@ -19,17 +19,10 @@ const sidebars: SidebarsConfig = {
     'contributing',
     {
       type: 'category',
-      label: 'Code Review',
+      label: 'Agent Workflows',
       items: [
-        'templates/code-review/security-review',
-        'templates/code-review/performance-review',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Testing',
-      items: [
-        'templates/testing/unit-test-generation',
+        'templates/agent-workflows/requirements-writing',
+        'templates/agent-workflows/ticket-assignment',
       ],
     },
   ],

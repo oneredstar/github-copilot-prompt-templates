@@ -11,9 +11,11 @@ Thank you for your interest in contributing to the GitHub Copilot Prompt Templat
 1. Fork the repository
 2. Create a new branch for your changes
 3. Add or update templates in the `templates/` directory
-4. Update the documentation site if needed
+4. Update the sidebar configuration if needed
 5. Test your changes locally
 6. Submit a pull request
+
+**⚠️ Important:** Templates should only be edited in the `templates/` directory. The `website/docs/templates/` directory is automatically generated during build and should never be edited manually.
 
 ## Adding a New Template
 
@@ -41,60 +43,70 @@ templates/
 
 **Naming Convention:** Use lowercase kebab-case (e.g., `api-error-handling.md`)
 
+**⚠️ Important:** Only edit templates in the `templates/` directory. The `website/docs/templates/` directory is automatically generated and should never be edited manually.
+
 ### 3. Follow the Template Structure
 
-Each template should include these sections:
+Each template should contain a **copy-paste ready prompt** that users can directly use with AI agents. The template should include:
 
-```markdown
-# Template Title
+1. **Title and Purpose** - Clear description of what the prompt does
+2. **When to Use** - Specific use cases
+3. **The Prompt** - A complete, generic prompt in a code block that can be copied and customized
+4. **Customization Instructions** - How to replace placeholders with actual values
+5. **Example** (optional) - Concrete before/after example
+6. **Variations** (optional) - Alternative versions for different scenarios
+
+#### Generic Template Structure
+
+````markdown
+# [Template Name]
 
 ## Purpose
-Brief description of what the template does and when to use it.
+[Brief description of what this prompt does and when to use it]
 
-## Inputs
-- List of required information
-- Context the user must provide
-- Optional parameters
+**When to use:** [Specific use case description]
 
-## Output
-What Copilot will provide when using this template.
+## The Prompt
+
+Copy this prompt and replace the placeholders with your specific details:
+
+```
+[GENERIC PROMPT CONTENT HERE]
+
+Replace these placeholders:
+- [PLACEHOLDER_1]: Description of what to put here
+- [PLACEHOLDER_2]: Description of what to put here
+- [CUSTOM_INPUT_SECTION]: Your specific requirements/details go here
+```
 
 ## Example Usage
-\```
-Concrete example showing the template in action
-\```
+
+### Before (Your Input)
+```
+[Example of what you would provide]
+```
+
+### After (Final Prompt)
+```
+[Example of the customized prompt ready to use]
+```
 
 ## Variations (optional)
-Alternative approaches or modifications
+
+### [Variation Name]
+```
+[Alternative prompt for specific scenario]
+```
 
 ## Safety Notes (optional)
-Warnings or important considerations
-```
+- [Important warnings or considerations]
+````
 
 ### 4. Add Documentation Page
 
-Create a corresponding page in `website/docs/templates/<category>/`:
+**Skip this step!** The documentation pages are automatically generated from the `templates/` directory during the build process.
 
-```
-website/docs/templates/
-  code-review/
-    security-review.md
-    performance-review.md
-    your-new-template.md  ← Add here
-```
-
-The documentation page should mirror the template content but can include:
-- Links back to the canonical template in `templates/`
-- Additional context for website visitors
-- Front matter for sidebar positioning
-
-Example front matter:
-
-```markdown
----
-sidebar_position: 3
----
-```
+If you want to customize the sidebar position or front matter for your template, you can configure it in the sync script at `scripts/sync-templates.js`.
 
 ### 5. Update Sidebar Configuration
 
@@ -136,6 +148,8 @@ npm ci
 npm run start
 ```
 
+This will automatically sync templates from `templates/` to `website/docs/templates/` and start the development server.
+
 Visit `http://localhost:3000` and verify:
 - Your template appears in the sidebar
 - Links work correctly
@@ -148,7 +162,7 @@ Visit `http://localhost:3000` and verify:
 npm run build
 ```
 
-Ensure the build completes without errors.
+This will automatically sync templates and build the site. Ensure the build completes without errors.
 
 ## Style Guidelines
 
@@ -196,8 +210,8 @@ Include:
 
 Before submitting, ensure:
 - [ ] Template follows the standard structure
-- [ ] Documentation page created/updated
-- [ ] Sidebar updated if needed
+- [ ] Template is in the `templates/` directory (NOT in `website/docs/templates/`)
+- [ ] Sidebar updated in `website/sidebars.ts` if needed
 - [ ] Local build succeeds (`npm run build`)
 - [ ] No broken links
 - [ ] Examples are clear and practical
